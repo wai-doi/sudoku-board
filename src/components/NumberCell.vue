@@ -4,16 +4,18 @@ import type { Cell } from '../type'
 
 const props = defineProps<{
   cell: Cell
+  selected: boolean
 }>()
 
-const cellBorderClass = computed(() => ({
+const cellClass = computed(() => ({
   'border-bottom-thick': (props.cell.row + 1) % 3 === 0 && props.cell.row !== 8,
   'border-right-thick': (props.cell.col + 1) % 3 === 0 && props.cell.col !== 8,
+  'cell-selected': props.selected,
 }))
 </script>
 
 <template>
-  <div class="cell" :class="cellBorderClass">{{ cell.value }}</div>
+  <div class="cell" :class="cellClass">{{ cell.value }}</div>
 </template>
 
 <style scoped>
@@ -28,15 +30,15 @@ const cellBorderClass = computed(() => ({
   border: solid 1px;
 }
 
-.cell:hover {
-  background-color: gray;
-}
-
 .border-bottom-thick {
   border-bottom: 5px solid;
 }
 
 .border-right-thick {
   border-right: 5px solid;
+}
+
+.cell-selected {
+  background-color: lightgray;
 }
 </style>

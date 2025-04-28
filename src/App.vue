@@ -8,7 +8,7 @@ const board = ref<Board>(initializeCellValue())
 function initializeCellValue(): Board {
   return [...Array(9)].map((_, row) => {
     return [...Array(9)].map((_, col) => {
-      return { value: null, row: row, col: col, readonly: false }
+      return { id: `${row}-${col}`, value: null, row: row, col: col, readonly: false }
     })
   })
 }
