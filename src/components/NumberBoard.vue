@@ -1,11 +1,32 @@
 <script setup lang="ts">
-import { ref } from 'vue'
+import { onBeforeUnmount, onMounted, ref } from 'vue'
 import NumberCell from './NumberCell.vue'
-import type { Board } from '../type'
+import type { Board, Cell } from '../type'
 
-defineProps<{
+const props = defineProps<{
   board: Board
 }>()
+
+function handleKeyDown(event: KeyboardEvent): void {
+  if (!selectedCellId.value) return
+  const selectedCell: Cell = props.board.flat().find((cell) => cell.id === selectedCellId.value)!
+
+  if (/^[1-9]$/.test(event.key)) {
+    selectedCell.value = Number(event.key)
+  } else if (event.key === 'Backspace') {
+    selectedCell.value = null
+  } else {
+    return
+  }
+}
+
+onMounted(() => {
+  window.addEventListener('keydown', handleKeyDown)
+})
+
+onBeforeUnmount(() => {
+  window.removeEventListener('keydown', handleKeyDown)
+})
 
 const selectedCellId = ref<string | null>(null)
 function isSelectedCell(id: string): boolean {
