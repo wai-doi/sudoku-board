@@ -40,7 +40,7 @@ function updateSelectedCell(id: string): void {
 </script>
 
 <template>
-  <div class="container">
+  <div class="board-container">
     <div v-for="(row, rowIndex) in board" :key="rowIndex" class="row">
       <NumberCell
         v-for="(cell, cellIndex) in row"
@@ -54,8 +54,7 @@ function updateSelectedCell(id: string): void {
 </template>
 
 <style scoped>
-.container {
-  margin: 100px;
+.board-container {
   border: 5px solid;
 }
 

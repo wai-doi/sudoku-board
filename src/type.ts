@@ -7,3 +7,5 @@ export type Cell = {
 }
 
 export type Board = Cell[][]
+
+export type Mode = 'edit' | 'solve'
