@@ -33,5 +33,6 @@ function switchMode(): void {
   flex-flow: column;
   gap: 10px;
   margin: 50px;
+  user-select: none;
 }
 </style>
