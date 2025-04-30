@@ -24,6 +24,8 @@ function handleKeyDown(event: KeyboardEvent): void {
   } else {
     return
   }
+
+  localStorage.setItem('sudoku-board', JSON.stringify(props.board))
 }
 
 onMounted(() => {

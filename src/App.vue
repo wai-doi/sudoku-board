@@ -4,11 +4,14 @@ import NumberBoard from './components/NumberBoard.vue'
 import type { Board, Mode } from './type'
 import GameMode from './components/GameMode.vue'
 
-const board = ref<Board>(initializeCellValue())
+const board = ref<Board>(savedBoard() || initializeCellValue())
 const mode = ref<Mode>('edit')
 
 provide<Ref<Mode>>('mode', mode)
 
+function savedBoard() {
+  return JSON.parse(localStorage.getItem('sudoku-board') || 'null')
+}
 
 function initializeCellValue(): Board {
   return [...Array(9)].map((_, row) => {
