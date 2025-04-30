@@ -3,6 +3,7 @@ import { provide, ref, type Ref } from 'vue'
 import NumberBoard from './components/NumberBoard.vue'
 import type { Board, Mode } from './type'
 import GameMode from './components/GameMode.vue'
+import ClearButton from './components/ClearButton.vue'
 
 const board = ref<Board>(savedBoard() || initializeCellValue())
 const mode = ref<Mode>('edit')
@@ -24,12 +25,19 @@ function initializeCellValue(): Board {
 function switchMode(): void {
   mode.value = mode.value === 'edit' ? 'solve' : 'edit'
 }
+
+function clearBoard(): void {
+  board.value = initializeCellValue()
+}
 </script>
 
 <template>
   <main class="main-container">
     <GameMode :mode="mode" @switch-mode="switchMode" />
     <NumberBoard :board="board" />
+    <div class="button-container">
+      <ClearButton v-show="mode === 'edit'" @clear-board="clearBoard" />
+    </div>
   </main>
 </template>
 
@@ -40,5 +48,10 @@ function switchMode(): void {
   gap: 10px;
   margin: 50px;
   user-select: none;
+}
+
+.button-container {
+  display: flex;
+  justify-content: center;
 }
 </style>
