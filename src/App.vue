@@ -1,11 +1,14 @@
 <script setup lang="ts">
-import { ref } from 'vue'
+import { provide, ref, type Ref } from 'vue'
 import NumberBoard from './components/NumberBoard.vue'
 import type { Board, Mode } from './type'
 import GameMode from './components/GameMode.vue'
 
 const board = ref<Board>(initializeCellValue())
 const mode = ref<Mode>('edit')
+
+provide<Ref<Mode>>('mode', mode)
+
 
 function initializeCellValue(): Board {
   return [...Array(9)].map((_, row) => {

@@ -1,20 +1,26 @@
 <script setup lang="ts">
-import { onBeforeUnmount, onMounted, ref } from 'vue'
+import { inject, onBeforeUnmount, onMounted, ref, type Ref } from 'vue'
 import NumberCell from './NumberCell.vue'
-import type { Board, Cell } from '../type'
+import type { Board, Cell, Mode } from '../type'
 
 const props = defineProps<{
   board: Board
 }>()
 
+const mode = inject<Ref<Mode>>('mode')
+
 function handleKeyDown(event: KeyboardEvent): void {
   if (!selectedCellId.value) return
   const selectedCell: Cell = props.board.flat().find((cell) => cell.id === selectedCellId.value)!
 
+  if (mode?.value === 'solve' && selectedCell.readonly) return
+
   if (/^[1-9]$/.test(event.key)) {
     selectedCell.value = Number(event.key)
+    if (mode?.value === 'edit') selectedCell.readonly = true
   } else if (event.key === 'Backspace') {
     selectedCell.value = null
+    selectedCell.readonly = false
   } else {
     return
   }

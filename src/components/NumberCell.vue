@@ -11,6 +11,7 @@ const cellClass = computed(() => ({
   'border-bottom-thick': (props.cell.row + 1) % 3 === 0 && props.cell.row !== 8,
   'border-right-thick': (props.cell.col + 1) % 3 === 0 && props.cell.col !== 8,
   'cell-selected': props.selected,
+  'cell-readonly': props.cell.readonly,
 }))
 </script>
 
@@ -40,5 +41,9 @@ const cellClass = computed(() => ({
 
 .cell-selected {
   background-color: lightgray;
+}
+
+.cell-readonly {
+  font-weight: bold;
 }
 </style>
