@@ -11,24 +11,48 @@ const cellClass = computed(() => ({
   'border-bottom-thick': (props.cell.row + 1) % 3 === 0 && props.cell.row !== 8,
   'border-right-thick': (props.cell.col + 1) % 3 === 0 && props.cell.col !== 8,
   'cell-selected': props.selected,
+}))
+
+const cellValueClass = computed(() => ({
   'cell-readonly': props.cell.readonly,
 }))
 </script>
 
 <template>
-  <div class="cell" :class="cellClass">{{ cell.value }}</div>
+  <div class="cell" :class="cellClass">
+    <div class="cell-candidates">
+      {{ cell.candidates.join('') }}
+    </div>
+    <div class="cell-value" :class="cellValueClass">
+      {{ cell.value }}
+    </div>
+  </div>
 </template>
 
 <style scoped>
 .cell {
+  width: 75px;
+  height: 75px;
+  cursor: pointer;
+  border: solid 1px;
+}
+
+.cell-candidates {
+  padding-left: 0.3rem;
+  font-size: 1rem;
+  letter-spacing: 0.3rem;
+  overflow-wrap: anywhere;
+}
+
+.cell-value {
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 75px;
-  height: 75px;
   font-size: 3rem;
-  cursor: pointer;
-  border: solid 1px;
+}
+
+.cell-candidates-text {
+  font-size: 0.2rem;
 }
 
 .border-bottom-thick {

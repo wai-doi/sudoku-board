@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { provide, ref, type Ref } from 'vue'
 import NumberBoard from './components/NumberBoard.vue'
-import type { Board, Mode } from './type'
+import type { Board, Cell, Mode } from './type'
 import GameMode from './components/GameMode.vue'
 import ClearButton from './components/ClearButton.vue'
 
@@ -15,9 +15,16 @@ function savedBoard() {
 }
 
 function initializeCellValue(): Board {
-  return [...Array(9)].map((_, row) => {
-    return [...Array(9)].map((_, col) => {
-      return { id: `${row}-${col}`, value: null, row: row, col: col, readonly: false }
+  return [...Array(9)].map((_, row): Cell[] => {
+    return [...Array(9)].map((_, col): Cell => {
+      return {
+        id: `${row}-${col}`,
+        value: null,
+        candidates: [],
+        row: row,
+        col: col,
+        readonly: false,
+      }
     })
   })
 }

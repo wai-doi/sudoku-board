@@ -9,6 +9,18 @@ const props = defineProps<{
 
 const mode = inject<Ref<Mode>>('mode')
 
+const shiftKeyMap: Record<string, number> = {
+  '!': 1,
+  '@': 2,
+  '#': 3,
+  $: 4,
+  '%': 5,
+  '^': 6,
+  '&': 7,
+  '*': 8,
+  '(': 9,
+}
+
 function handleKeyDown(event: KeyboardEvent): void {
   if (!selectedCellId.value) return
   const selectedCell: Cell = props.board.flat().find((cell) => cell.id === selectedCellId.value)!
@@ -17,10 +29,21 @@ function handleKeyDown(event: KeyboardEvent): void {
 
   if (/^[1-9]$/.test(event.key)) {
     selectedCell.value = Number(event.key)
+    selectedCell.candidates = []
     if (mode?.value === 'edit') selectedCell.readonly = true
   } else if (event.key === 'Backspace') {
     selectedCell.value = null
+    selectedCell.candidates = []
     selectedCell.readonly = false
+  } else if (event.shiftKey && shiftKeyMap[event.key]) {
+    if (selectedCell.value) return
+    const num = shiftKeyMap[event.key]
+    if (selectedCell.candidates.includes(num)) {
+      selectedCell.candidates = selectedCell.candidates.filter((c) => c !== num)
+    } else {
+      selectedCell.candidates.push(num)
+      selectedCell.candidates.sort()
+    }
   } else {
     return
   }
