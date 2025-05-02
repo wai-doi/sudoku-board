@@ -1,11 +1,5 @@
-<script setup lang="ts">
-const emit = defineEmits<{
-  'clear-board': []
-}>()
-</script>
-
 <template>
-  <button class="clear-button" @click="emit('clear-board')">クリア</button>
+  <button class="clear-button">クリア</button>
 </template>
 
 <style scoped>

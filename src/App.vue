@@ -43,7 +43,7 @@ function clearBoard(): void {
     <GameMode :mode="mode" @switch-mode="switchMode" />
     <NumberBoard :board="board" />
     <div class="button-container">
-      <ClearButton v-show="mode === 'edit'" @clear-board="clearBoard" />
+      <ClearButton v-show="mode === 'edit'" @click="clearBoard" />
     </div>
   </main>
 </template>
