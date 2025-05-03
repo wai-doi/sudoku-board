@@ -1,10 +1,15 @@
 <script setup lang="ts">
-import { inject, onBeforeUnmount, onMounted, ref, type Ref } from 'vue'
+import { inject, onBeforeUnmount, onMounted, ref, toRaw, type Ref } from 'vue'
 import NumberCell from './NumberCell.vue'
 import type { Board, Cell, Mode } from '../type'
 
 const props = defineProps<{
   board: Board
+}>()
+
+const emit = defineEmits<{
+  'update-board': [Board]
+  'save-history': [Board]
 }>()
 
 const mode = inject<Ref<Mode>>('mode')
@@ -23,7 +28,9 @@ const shiftKeyMap: Record<string, number> = {
 
 function handleKeyDown(event: KeyboardEvent): void {
   if (!selectedCellId.value) return
-  const selectedCell: Cell = props.board.flat().find((cell) => cell.id === selectedCellId.value)!
+
+  const newBoard: Board = structuredClone(toRaw(props.board))
+  const selectedCell: Cell = newBoard.flat().find((cell) => cell.id === selectedCellId.value)!
 
   if (mode?.value === 'solve' && selectedCell.readonly) return
 
@@ -48,7 +55,11 @@ function handleKeyDown(event: KeyboardEvent): void {
     return
   }
 
-  localStorage.setItem('sudoku-board', JSON.stringify(props.board))
+  emit('update-board', newBoard)
+
+  localStorage.setItem('sudoku-board', JSON.stringify(newBoard))
+
+  if (mode?.value === 'solve') emit('save-history', newBoard)
 }
 
 onMounted(() => {

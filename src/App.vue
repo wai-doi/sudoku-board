@@ -1,11 +1,15 @@
 <script setup lang="ts">
-import { provide, ref, type Ref } from 'vue'
+import { provide, ref, toRaw, type Ref } from 'vue'
 import NumberBoard from './components/NumberBoard.vue'
 import type { Board, Cell, Mode } from './type'
 import GameMode from './components/GameMode.vue'
 import ClearButton from './components/ClearButton.vue'
+import UndoButton from './components/UndoButton.vue'
+import RedoButton from './components/RedoButton.vue'
 
 const board = ref<Board>(savedBoard() || initializeCellValue())
+const history = ref<Board[]>([])
+const currentHistoryIndex = ref<number>(-1)
 const mode = ref<Mode>('edit')
 
 provide<Ref<Mode>>('mode', mode)
@@ -31,19 +35,47 @@ function initializeCellValue(): Board {
 
 function switchMode(): void {
   mode.value = mode.value === 'edit' ? 'solve' : 'edit'
+
+  history.value = [structuredClone(toRaw(board.value))]
+  currentHistoryIndex.value = 0
 }
 
 function clearBoard(): void {
   board.value = initializeCellValue()
+}
+
+function updateBoard(newBoard: Board): void {
+  board.value = newBoard
+}
+
+function saveHistory(newBoard: Board): void {
+  history.value = [...history.value.slice(0, currentHistoryIndex.value + 1), newBoard]
+  currentHistoryIndex.value = history.value.length - 1
+}
+
+function undo(): void {
+  currentHistoryIndex.value = currentHistoryIndex.value - 1
+  board.value = history.value[currentHistoryIndex.value]
+}
+
+function redo(): void {
+  currentHistoryIndex.value = currentHistoryIndex.value + 1
+  board.value = history.value[currentHistoryIndex.value]
 }
 </script>
 
 <template>
   <main class="main-container">
     <GameMode :mode="mode" @switch-mode="switchMode" />
-    <NumberBoard :board="board" />
+    <NumberBoard :board="board" @update-board="updateBoard" @save-history="saveHistory" />
     <div class="button-container">
       <ClearButton v-show="mode === 'edit'" @click="clearBoard" />
+      <UndoButton v-show="mode === 'solve'" @click="undo" :disabled="currentHistoryIndex === 0" />
+      <RedoButton
+        v-show="mode === 'solve'"
+        @click="redo"
+        :disabled="currentHistoryIndex === history.length - 1"
+      />
     </div>
   </main>
 </template>
@@ -59,6 +91,7 @@ function clearBoard(): void {
 
 .button-container {
   display: flex;
+  gap: 50px;
   justify-content: center;
 }
 </style>
