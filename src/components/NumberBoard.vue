@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { inject, onBeforeUnmount, onMounted, ref, toRaw, type Ref } from 'vue'
+import { computed, inject, onBeforeUnmount, onMounted, ref, toRaw, type Ref } from 'vue'
 import NumberCell from './NumberCell.vue'
 import type { Board, Cell, Mode } from '../type'
 
@@ -79,10 +79,15 @@ function isSelectedCell(id: string): boolean {
 function updateSelectedCell(id: string): void {
   selectedCellId.value = id == selectedCellId.value ? null : id
 }
+
+const boardContainerClass = computed(() => ({
+  'edit-mode': mode?.value === 'edit',
+  'solve-mode': mode?.value === 'solve',
+}))
 </script>
 
 <template>
-  <div class="board-container">
+  <div class="board-container" :class="boardContainerClass">
     <div v-for="(row, rowIndex) in board" :key="rowIndex" class="row">
       <NumberCell
         v-for="(cell, cellIndex) in row"
@@ -98,6 +103,17 @@ function updateSelectedCell(id: string): void {
 <style scoped>
 .board-container {
   border: 5px solid;
+  transition: background-color 0.3s ease;
+}
+
+.edit-mode {
+  background-color: #fdf6e3;
+  border-color: #ffcc80;
+}
+
+.solve-mode {
+  background-color: #e3f2fd;
+  border-color: #90caf9;
 }
 
 .row {

@@ -1,16 +1,20 @@
 <script setup lang="ts">
-import { computed } from 'vue'
-import type { Cell } from '../type'
+import { computed, inject, type Ref } from 'vue'
+import type { Cell, Mode } from '../type'
 
 const props = defineProps<{
   cell: Cell
   selected: boolean
 }>()
 
+const mode = inject<Ref<Mode>>('mode')
+
 const cellClass = computed(() => ({
   'border-bottom-thick': (props.cell.row + 1) % 3 === 0 && props.cell.row !== 8,
   'border-right-thick': (props.cell.col + 1) % 3 === 0 && props.cell.col !== 8,
   'cell-selected': props.selected,
+  'edit-mode': mode?.value === 'edit',
+  'solve-mode': mode?.value === 'solve',
 }))
 
 const cellValueClass = computed(() => ({
@@ -63,8 +67,16 @@ const cellValueClass = computed(() => ({
   border-right: 5px solid;
 }
 
+.edit-mode {
+  border-color: #ffcc80;
+}
+
+.solve-mode {
+  border-color: #90caf9;
+}
+
 .cell-selected {
-  background-color: lightgray;
+  background-color: lightgray !important;
 }
 
 .cell-readonly {
