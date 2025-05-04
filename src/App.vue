@@ -6,6 +6,7 @@ import GameMode from './components/GameMode.vue'
 import ClearButton from './components/ClearButton.vue'
 import UndoButton from './components/UndoButton.vue'
 import RedoButton from './components/RedoButton.vue'
+import GitHublink from './components/GitHubLink.vue'
 
 const board = ref<Board>(savedBoard() || initializeCellValue())
 const history = ref<Board[]>([])
@@ -65,28 +66,44 @@ function redo(): void {
 </script>
 
 <template>
-  <main class="main-container">
-    <GameMode :mode="mode" @switch-mode="switchMode" />
-    <NumberBoard :board="board" @update-board="updateBoard" @save-history="saveHistory" />
-    <div class="button-container">
-      <ClearButton v-show="mode === 'edit'" @click="clearBoard" />
-      <UndoButton v-show="mode === 'solve'" @click="undo" :disabled="currentHistoryIndex === 0" />
-      <RedoButton
-        v-show="mode === 'solve'"
-        @click="redo"
-        :disabled="currentHistoryIndex === history.length - 1"
-      />
+  <main>
+    <div class="main-container">
+      <div class="header">
+        <GitHublink />
+      </div>
+      <GameMode :mode="mode" @switch-mode="switchMode" />
+      <NumberBoard :board="board" @update-board="updateBoard" @save-history="saveHistory" />
+      <div class="button-container">
+        <ClearButton v-show="mode === 'edit'" @click="clearBoard" />
+        <UndoButton v-show="mode === 'solve'" @click="undo" :disabled="currentHistoryIndex === 0" />
+        <RedoButton
+          v-show="mode === 'solve'"
+          @click="redo"
+          :disabled="currentHistoryIndex === history.length - 1"
+        />
+      </div>
     </div>
   </main>
 </template>
 
 <style scoped>
+main {
+  display: flex;
+  justify-content: center;
+  margin-top: 10px;
+}
+
 .main-container {
   display: flex;
   flex-flow: column;
   gap: 10px;
-  margin: 50px;
   user-select: none;
+}
+
+.header {
+  display: flex;
+  justify-content: end;
+  margin-top: 10px;
 }
 
 .button-container {

@@ -1,9 +1,7 @@
 @import url('./base.css');
 
 #app {
-  display: flex;
-  justify-content: center;
-  max-width: 65%;
+  max-width: 50%;
   margin: 0 auto;
   font-weight: normal;
 }
