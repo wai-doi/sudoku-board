@@ -1,16 +1,11 @@
 <script setup lang="ts">
+import HistoryButton from './HistoryButton.vue'
+
 defineProps<{
   disabled: boolean
 }>()
 </script>
 
 <template>
-  <button class="back-button" :disabled="disabled">進む</button>
+  <HistoryButton :disabled="disabled">進む</HistoryButton>
 </template>
-
-<style scoped>
-.back-button {
-  font-size: 1.5rem;
-  cursor: pointer;
-}
-</style>
