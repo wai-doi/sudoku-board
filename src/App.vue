@@ -8,16 +8,12 @@ import UndoButton from './components/UndoButton.vue'
 import RedoButton from './components/RedoButton.vue'
 import GitHublink from './components/GitHubLink.vue'
 
-const board = ref<Board>(savedBoard() || initializeCellValue())
-const history = ref<Board[]>([])
-const currentHistoryIndex = ref<number>(-1)
-const mode = ref<Mode>('edit')
+const board = ref<Board>(loadLocalStorage()['board'] || initializeCellValue())
+const history = ref<Board[]>(loadLocalStorage()['history'] || [])
+const currentHistoryIndex = ref<number>(loadLocalStorage()['currentHistoryIndex'] ?? -1)
+const mode = ref<Mode>(loadLocalStorage()['mode'] || 'edit')
 
 provide<Ref<Mode>>('mode', mode)
-
-function savedBoard() {
-  return JSON.parse(localStorage.getItem('sudoku-board') || 'null')
-}
 
 function initializeCellValue(): Board {
   return [...Array(9)].map((_, row): Cell[] => {
@@ -34,11 +30,20 @@ function initializeCellValue(): Board {
   })
 }
 
+function loadLocalStorage() {
+  const data = localStorage.getItem('sudoku-board')
+  if (!data) return {}
+
+  return JSON.parse(data)
+}
+
 function switchMode(): void {
   mode.value = mode.value === 'edit' ? 'solve' : 'edit'
 
   history.value = [structuredClone(toRaw(board.value))]
   currentHistoryIndex.value = 0
+
+  storeLocalStorage()
 }
 
 function clearBoard(): void {
@@ -57,11 +62,27 @@ function saveHistory(newBoard: Board): void {
 function undo(): void {
   currentHistoryIndex.value = currentHistoryIndex.value - 1
   board.value = history.value[currentHistoryIndex.value]
+
+  storeLocalStorage()
 }
 
 function redo(): void {
   currentHistoryIndex.value = currentHistoryIndex.value + 1
   board.value = history.value[currentHistoryIndex.value]
+
+  storeLocalStorage()
+}
+
+function storeLocalStorage() {
+  localStorage.setItem(
+    'sudoku-board',
+    JSON.stringify({
+      mode: mode.value,
+      board: board.value,
+      history: history.value,
+      currentHistoryIndex: currentHistoryIndex.value,
+    }),
+  )
 }
 </script>
 
@@ -72,7 +93,12 @@ function redo(): void {
         <GitHublink />
       </div>
       <GameMode :mode="mode" @switch-mode="switchMode" />
-      <NumberBoard :board="board" @update-board="updateBoard" @save-history="saveHistory" />
+      <NumberBoard
+        :board="board"
+        @update-board="updateBoard"
+        @save-history="saveHistory"
+        @store-local-storege="storeLocalStorage"
+      />
       <div class="button-container">
         <ClearButton v-show="mode === 'edit'" @click="clearBoard" />
         <UndoButton v-show="mode === 'solve'" @click="undo" :disabled="currentHistoryIndex === 0" />

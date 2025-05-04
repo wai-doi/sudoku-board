@@ -10,6 +10,7 @@ const props = defineProps<{
 const emit = defineEmits<{
   'update-board': [Board]
   'save-history': [Board]
+  'store-local-storege': []
 }>()
 
 const mode = inject<Ref<Mode>>('mode')
@@ -57,9 +58,9 @@ function handleKeyDown(event: KeyboardEvent): void {
 
   emit('update-board', newBoard)
 
-  localStorage.setItem('sudoku-board', JSON.stringify(newBoard))
-
   if (mode?.value === 'solve') emit('save-history', newBoard)
+
+  emit('store-local-storege')
 }
 
 onMounted(() => {
