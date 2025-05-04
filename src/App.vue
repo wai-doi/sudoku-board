@@ -38,16 +38,26 @@ function loadLocalStorage() {
 }
 
 function switchMode(): void {
-  mode.value = mode.value === 'edit' ? 'solve' : 'edit'
-
-  history.value = [structuredClone(toRaw(board.value))]
-  currentHistoryIndex.value = 0
+  if (mode.value === 'edit') {
+    mode.value = 'solve'
+    history.value = [structuredClone(toRaw(board.value))]
+    currentHistoryIndex.value = 0
+  } else {
+    if (confirm('解答を終了して初期配置に戻します。よろしいですか？')) {
+      mode.value = 'edit'
+      board.value = history.value[0]
+      history.value = []
+      currentHistoryIndex.value = -1
+    }
+  }
 
   storeLocalStorage()
 }
 
 function clearBoard(): void {
-  board.value = initializeCellValue()
+  if (confirm('入力した数字を全て削除します。よろしいですか？')) {
+    board.value = initializeCellValue()
+  }
 }
 
 function updateBoard(newBoard: Board): void {
