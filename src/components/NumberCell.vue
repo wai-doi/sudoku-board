@@ -24,10 +24,10 @@ const cellValueClass = computed(() => ({
 
 <template>
   <div class="cell" :class="cellClass">
-    <div class="cell-candidates">
+    <div v-show="cell.candidates" class="cell-candidates">
       {{ cell.candidates.join('') }}
     </div>
-    <div class="cell-value" :class="cellValueClass">
+    <div v-show="cell.value" class="cell-value" :class="cellValueClass">
       {{ cell.value }}
     </div>
   </div>
@@ -52,7 +52,8 @@ const cellValueClass = computed(() => ({
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 3rem;
+  height: 100%;
+  font-size: 2.5rem;
 }
 
 .cell-candidates-text {
