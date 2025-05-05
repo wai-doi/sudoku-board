@@ -8,6 +8,7 @@ import UndoButton from './components/UndoButton.vue'
 import RedoButton from './components/RedoButton.vue'
 import GitHublink from './components/GitHubLink.vue'
 import ClearModal from './components/ClearModal.vue'
+import UsageLink from './components/UsageLink.vue'
 
 const board = ref<Board>(loadLocalStorage()['board'] || initializeCellValue())
 const history = ref<Board[]>(loadLocalStorage()['history'] || [])
@@ -119,6 +120,7 @@ function checkSolved(): void {
     <div class="main-container">
       <div class="header">
         <GitHublink />
+        <UsageLink />
       </div>
       <GameMode :mode="mode" @switch-mode="switchMode" />
       <NumberBoard
@@ -158,6 +160,7 @@ main {
 
 .header {
   display: flex;
+  gap: 20px;
   justify-content: end;
   margin-top: 10px;
 }
