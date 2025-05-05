@@ -3,7 +3,7 @@ import { provide, ref, toRaw, type Ref } from 'vue'
 import NumberBoard from './components/NumberBoard.vue'
 import type { Board, Cell, Mode } from './type'
 import GameMode from './components/GameMode.vue'
-import ClearButton from './components/ClearButton.vue'
+import ResetButton from './components/ResetButton.vue'
 import UndoButton from './components/UndoButton.vue'
 import RedoButton from './components/RedoButton.vue'
 import GitHublink from './components/GitHubLink.vue'
@@ -54,7 +54,7 @@ function switchMode(): void {
   storeLocalStorage()
 }
 
-function clearBoard(): void {
+function resetBoard(): void {
   if (confirm('入力した数字を全て削除します。よろしいですか？')) {
     board.value = initializeCellValue()
   }
@@ -110,7 +110,7 @@ function storeLocalStorage() {
         @store-local-storege="storeLocalStorage"
       />
       <div class="button-container">
-        <ClearButton v-show="mode === 'edit'" @click="clearBoard" />
+        <ResetButton v-show="mode === 'edit'" @click="resetBoard" />
         <UndoButton v-show="mode === 'solve'" @click="undo" :disabled="currentHistoryIndex === 0" />
         <RedoButton
           v-show="mode === 'solve'"

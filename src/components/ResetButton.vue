@@ -1,9 +1,9 @@
 <template>
-  <button class="clear-button">クリア</button>
+  <button class="reset-button">リセット</button>
 </template>
 
 <style scoped>
-.clear-button {
+.reset-button {
   padding: 8px 16px;
   font-size: 1.3rem;
   font-weight: bold;
@@ -15,7 +15,7 @@
   transition: background-color 0.3s ease;
 }
 
-.clear-button:hover {
+.reset-button:hover {
   background-color: #c62828;
 }
 </style>
