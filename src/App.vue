@@ -7,11 +7,13 @@ import ResetButton from './components/ResetButton.vue'
 import UndoButton from './components/UndoButton.vue'
 import RedoButton from './components/RedoButton.vue'
 import GitHublink from './components/GitHubLink.vue'
+import ClearModal from './components/ClearModal.vue'
 
 const board = ref<Board>(loadLocalStorage()['board'] || initializeCellValue())
 const history = ref<Board[]>(loadLocalStorage()['history'] || [])
 const currentHistoryIndex = ref<number>(loadLocalStorage()['currentHistoryIndex'] ?? -1)
 const mode = ref<Mode>(loadLocalStorage()['mode'] || 'edit')
+const showModal = ref<boolean>(false)
 
 provide<Ref<Mode>>('mode', mode)
 
@@ -94,6 +96,22 @@ function storeLocalStorage() {
     }),
   )
 }
+
+function checkSolved(): void {
+  for (let row = 0; row < 9; row++) {
+    const values = board.value[row].map((cell) => cell.value)
+    const sorted = [...values].sort()
+    if (!sorted.every((v, i) => v === i + 1)) return
+  }
+
+  for (let col = 0; col < 9; col++) {
+    const values = board.value.map((row) => row[col].value)
+    const sorted = [...values].sort()
+    if (!sorted.every((v, i) => v === i + 1)) return
+  }
+
+  showModal.value = true
+}
 </script>
 
 <template>
@@ -108,6 +126,7 @@ function storeLocalStorage() {
         @update-board="updateBoard"
         @save-history="saveHistory"
         @store-local-storege="storeLocalStorage"
+        @check-solved="checkSolved"
       />
       <div class="button-container">
         <ResetButton v-show="mode === 'edit'" @click="resetBoard" />
@@ -120,6 +139,7 @@ function storeLocalStorage() {
       </div>
     </div>
   </main>
+  <ClearModal v-if="showModal" @click="() => (showModal = false)" />
 </template>
 
 <style scoped>

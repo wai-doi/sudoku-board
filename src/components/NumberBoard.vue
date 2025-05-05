@@ -11,6 +11,7 @@ const emit = defineEmits<{
   'update-board': [Board]
   'save-history': [Board]
   'store-local-storege': []
+  'check-solved': []
 }>()
 
 const mode = inject<Ref<Mode>>('mode')
@@ -58,7 +59,10 @@ function handleKeyDown(event: KeyboardEvent): void {
 
   emit('update-board', newBoard)
 
-  if (mode?.value === 'solve') emit('save-history', newBoard)
+  if (mode?.value === 'solve') {
+    emit('save-history', newBoard)
+    emit('check-solved')
+  }
 
   emit('store-local-storege')
 }
