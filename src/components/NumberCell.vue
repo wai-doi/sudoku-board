@@ -23,7 +23,7 @@ const cellValueClass = computed(() => ({
 </script>
 
 <template>
-  <div class="cell" :class="cellClass">
+  <div :data-testid="`cell-${cell.row}-${cell.col}`" class="cell" :class="cellClass">
     <div v-show="cell.candidates" class="cell-candidates">
       {{ cell.candidates.join('') }}
     </div>

@@ -1,5 +1,5 @@
 <template>
-  <button class="reset-button">リセット</button>
+  <button data-testid="reset-button" class="reset-button">リセット</button>
 </template>
 
 <style scoped>

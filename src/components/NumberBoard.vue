@@ -36,6 +36,9 @@ function handleKeyDown(event: KeyboardEvent): void {
 
   if (mode?.value === 'solve' && selectedCell.readonly) return
 
+  // Backspaceなどの動作を抑制
+  event.preventDefault()
+
   if (/^[1-9]$/.test(event.key)) {
     selectedCell.value = Number(event.key)
     selectedCell.candidates = []
