@@ -41,6 +41,8 @@ export default defineConfig({
 
     /* Only on CI systems run the tests headless */
     headless: !!process.env.CI,
+
+    screenshot: { mode: 'only-on-failure', fullPage: true },
   },
 
   /* Configure projects for major browsers */
