@@ -6,7 +6,7 @@ test.beforeEach(async ({ page }) => {
   await page.goto('/')
 })
 
-test('編集モードで数字を入力したり削除できる', async ({ page }) => {
+test('編集モードで数字を入力できる', async ({ page }) => {
   const cell = page.getByTestId('cell-4-4')
 
   await expect(cell).toHaveText('')
