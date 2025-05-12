@@ -58,20 +58,17 @@ test('編集モードでリセットボタンで数字を削除できる', async
   await page.keyboard.press('1')
   await expect(cell).toHaveText('1')
 
-  const resetButton = page.getByTestId('reset-button')
-
+  const resetButton = page.getByRole('button', { name: 'リセット' })
   await resetButton.click()
 
   await expect(cell).toHaveText('')
 })
 
 test('編集モードで解答モードに切り替えができる', async ({ page }) => {
-  const modeText = page.getByTestId('mode-text')
+  await expect(page.getByText('📝 編集モード')).toBeVisible()
 
-  await expect(modeText).toHaveText('📝 編集モード')
-
-  const switchModeButton = page.getByTestId('switch-mode-button')
+  const switchModeButton = page.getByRole('button', { name: '解答モードに切り替え' })
   await switchModeButton.click()
 
-  await expect(modeText).toHaveText('🧩 解答モード')
+  await expect(page.getByText('🧩 解答モード')).toBeVisible()
 })

@@ -17,15 +17,10 @@ const modeClass = computed(() => ({
 
 <template>
   <div class="mode-container">
-    <span data-testid="mode-text" class="mode-text" :class="modeClass">
+    <span class="mode-text" :class="modeClass">
       {{ mode === 'edit' ? '📝 編集モード' : '🧩 解答モード' }}
     </span>
-    <button
-      data-testid="switch-mode-button"
-      class="switch-mode-button"
-      :class="modeClass"
-      @click="() => emit('switch-mode')"
-    >
+    <button class="switch-mode-button" :class="modeClass" @click="() => emit('switch-mode')">
       {{ mode === 'edit' ? '解答モード' : '編集モード' }}に切り替え
     </button>
   </div>
