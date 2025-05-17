@@ -35,8 +35,8 @@ const cellValueClass = computed(() => ({
 
 <style scoped>
 .cell {
-  width: 75px;
-  height: 75px;
+  width: 70px;
+  height: 70px;
   cursor: pointer;
   border: solid 1px;
 }
