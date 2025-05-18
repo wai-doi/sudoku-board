@@ -82,5 +82,6 @@ const cellValueClass = computed(() => ({
 
 .cell-readonly {
   font-weight: bold;
+  cursor: default;
 }
 </style>

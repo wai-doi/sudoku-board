@@ -84,8 +84,10 @@ function isSelectedCell(id: string): boolean {
 
   return selectedCellId.value === id
 }
-function updateSelectedCell(id: string): void {
-  selectedCellId.value = id == selectedCellId.value ? null : id
+function updateSelectedCell(cell: Cell): void {
+  if (mode.value === 'solve' && cell.readonly) return
+
+  selectedCellId.value = cell.id == selectedCellId.value ? null : cell.id
 }
 
 const boardContainerClass = computed(() => ({
@@ -102,7 +104,7 @@ const boardContainerClass = computed(() => ({
         :key="cellIndex"
         :cell="cell"
         :selected="isSelectedCell(cell.id)"
-        @click="updateSelectedCell(cell.id)"
+        @click="updateSelectedCell(cell)"
       />
     </div>
   </div>
