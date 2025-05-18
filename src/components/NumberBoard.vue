@@ -16,6 +16,13 @@ const emit = defineEmits<{
 
 const mode = inject<Ref<Mode>>('mode')
 
+const selectedCellId = ref<string | null>(null)
+
+const boardContainerClass = computed(() => ({
+  'edit-mode': mode?.value === 'edit',
+  'solve-mode': mode?.value === 'solve',
+}))
+
 const shiftKeyMap: Record<string, number> = {
   '!': 1,
   '@': 2,
@@ -28,6 +35,18 @@ const shiftKeyMap: Record<string, number> = {
   '(': 9,
 }
 
+function isSelectedCell(id: string): boolean {
+  if (!selectedCellId.value) return false
+
+  return selectedCellId.value === id
+}
+function updateSelectedCell(cell: Cell): void {
+  if (mode.value === 'solve' && cell.readonly) return
+
+  selectedCellId.value = cell.id == selectedCellId.value ? null : cell.id
+}
+
+// キー入力処理
 function handleKeyDown(event: KeyboardEvent): void {
   if (!selectedCellId.value) return
 
@@ -77,23 +96,6 @@ onMounted(() => {
 onBeforeUnmount(() => {
   window.removeEventListener('keydown', handleKeyDown)
 })
-
-const selectedCellId = ref<string | null>(null)
-function isSelectedCell(id: string): boolean {
-  if (!selectedCellId.value) return false
-
-  return selectedCellId.value === id
-}
-function updateSelectedCell(cell: Cell): void {
-  if (mode.value === 'solve' && cell.readonly) return
-
-  selectedCellId.value = cell.id == selectedCellId.value ? null : cell.id
-}
-
-const boardContainerClass = computed(() => ({
-  'edit-mode': mode?.value === 'edit',
-  'solve-mode': mode?.value === 'solve',
-}))
 </script>
 
 <template>
