@@ -14,13 +14,13 @@ const emit = defineEmits<{
   'check-solved': []
 }>()
 
-const mode = inject<Ref<Mode>>('mode')
+const mode = inject<Ref<Mode>>('mode')!
 
 const selectedCellId = ref<string | null>(null)
 
 const boardContainerClass = computed(() => ({
-  'edit-mode': mode?.value === 'edit',
-  'solve-mode': mode?.value === 'solve',
+  'edit-mode': mode.value === 'edit',
+  'solve-mode': mode.value === 'solve',
 }))
 
 const shiftKeyMap: Record<string, number> = {
@@ -53,7 +53,7 @@ function handleKeyDown(event: KeyboardEvent): void {
   const newBoard: Board = structuredClone(toRaw(props.board))
   const selectedCell: Cell = newBoard.flat().find((cell) => cell.id === selectedCellId.value)!
 
-  if (mode?.value === 'solve' && selectedCell.readonly) return
+  if (mode.value === 'solve' && selectedCell.readonly) return
 
   // Backspaceなどの動作を抑制
   event.preventDefault()
@@ -61,7 +61,7 @@ function handleKeyDown(event: KeyboardEvent): void {
   if (/^[1-9]$/.test(event.key)) {
     selectedCell.value = Number(event.key)
     selectedCell.candidates = []
-    if (mode?.value === 'edit') selectedCell.readonly = true
+    if (mode.value === 'edit') selectedCell.readonly = true
   } else if (event.key === 'Backspace') {
     selectedCell.value = null
     selectedCell.candidates = []
@@ -81,7 +81,7 @@ function handleKeyDown(event: KeyboardEvent): void {
 
   emit('update-board', newBoard)
 
-  if (mode?.value === 'solve') {
+  if (mode.value === 'solve') {
     emit('save-history', newBoard)
     emit('check-solved')
   }
